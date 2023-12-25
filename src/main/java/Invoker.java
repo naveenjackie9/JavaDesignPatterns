@@ -3,7 +3,19 @@ import edu.navi.creationDesignPatterns.builder.Car;
 import edu.navi.creationDesignPatterns.factory.ShapeFactory;
 import edu.navi.creationDesignPatterns.prototype.ColorProtype;
 import edu.navi.creationDesignPatterns.singletonDesignPattern.SingleTon;
+import edu.navi.structuralDesignPatterns.Adapter.Sparrow;
+import edu.navi.structuralDesignPatterns.Adapter.SqueakyDuckAdapter;
+import edu.navi.structuralDesignPatterns.Bridge.AssembleWorkShop;
+import edu.navi.structuralDesignPatterns.Bridge.BikeVehicle;
+import edu.navi.structuralDesignPatterns.Bridge.CarVehicle;
+import edu.navi.structuralDesignPatterns.Bridge.ProduceWorkShop;
+import edu.navi.structuralDesignPatterns.Decorator.Circle;
+import edu.navi.structuralDesignPatterns.Decorator.Rectangle;
+import edu.navi.structuralDesignPatterns.Decorator.RedOutLineShapeDecorator;
+import edu.navi.structuralDesignPatterns.Iterator.CarIterator;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -27,6 +39,18 @@ public class Invoker {
                 break;
             case "ProtoType":
                 testPrototypePattern();
+                break;
+            case "Adapter":
+                testAdapterPattern();
+                break;
+            case "Bridge":
+                testBridgePattern();
+                break;
+            case "Decorator":
+                testDecorator();
+                break;
+            case "Iterator":
+                testIterator();
                 break;
             default:
                 System.out.println(pattern + "Not yet configured");
@@ -61,5 +85,41 @@ public class Invoker {
     private static void testPrototypePattern() throws CloneNotSupportedException {
         ColorProtype.getColorPrototype("RED").drawColor();
         ColorProtype.getColorPrototype("BLACK").drawColor();
+    }
+
+    private static void testAdapterPattern() {
+        Sparrow sparrow = new Sparrow();
+        SqueakyDuckAdapter squeakyDuckAdapter = new SqueakyDuckAdapter(sparrow);
+        squeakyDuckAdapter.squeak();
+    }
+
+    private static void testBridgePattern() {
+        AssembleWorkShop assembleWorkShop = new AssembleWorkShop();
+        ProduceWorkShop produceWorkShop = new ProduceWorkShop();
+
+        BikeVehicle bikeVehicle = new BikeVehicle(List.of(assembleWorkShop, produceWorkShop));
+        CarVehicle carVehicle = new CarVehicle(List.of(assembleWorkShop));
+
+        bikeVehicle.manufacture();
+        carVehicle.manufacture();
+    }
+
+    private static void testDecorator() {
+        Circle circle = new Circle();
+        Rectangle rectangle = new Rectangle();
+        RedOutLineShapeDecorator redOutLineShapeDecorator = new RedOutLineShapeDecorator(circle);
+        redOutLineShapeDecorator.draw();
+        redOutLineShapeDecorator = new RedOutLineShapeDecorator(rectangle);
+        redOutLineShapeDecorator.draw();
+    }
+
+    private static void testIterator() {
+        CarIterator carIterator = new CarIterator();
+        carIterator.addCar("MARUTI");
+        carIterator.addCar("HONDA");
+        Iterator<String> carIterators = carIterator.iterator();
+        while (carIterators.hasNext()) {
+            System.out.println(carIterators.next());
+        }
     }
 }
